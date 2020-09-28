@@ -106,8 +106,10 @@ function redirect(){
 //    console.log('options',options)
    localStorage.setItem('options',JSON.stringify(options));
    localStorage.setItem('totalcount',totalcount)
+   console.log("BEFORE","localStorage.getItem('totalcount')",localStorage.getItem('totalcount'))
    localStorage.setItem('QuestionContent',JSON.stringify(questionContent))
    document.write(website);
+   console.log("localStorage.getItem('totalcount')",localStorage.getItem('totalcount'))
    totalcount=localStorage.getItem('totalcount')
    options=JSON.parse(localStorage.getItem('options'))
       console.log(JSON.parse(localStorage.getItem('QuestionContent')))
