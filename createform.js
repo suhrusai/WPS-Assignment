@@ -1,6 +1,9 @@
-var totalcount=0;
 var options=new Array();
+var totalcount=0;
 var questions=new Array();
+var responses=new Array();
+var questionContent=new Array();
+var Optionsforquestions=new Array();
 function addquestion(){
     // var newquestion=new question();
     totalcount+=1;
@@ -59,8 +62,6 @@ function redirect(){
    +'     <meta charset="utf-8">'
    +'     <meta name="viewport" content="width=device-width, initial-scale=1">'
    +'     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">'
-//    +'     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>'
-//    +'     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>'
    +'     <script src="createform.js"></script>'
    +' </head>'
    +' <body>'
@@ -80,17 +81,53 @@ function redirect(){
    +'     <br>'
    +'     <br>'
    var somevar="";
+   var responsesoption=new Array()
+   var QuestionContent=JSON.parse(localStorage.getItem(''))
    for(var i=1;i<=totalcount;i++){
+ 
        somevar+='Question'+i;
         website+='<div class="question-container1">'+'Q'+i+'. '+document.getElementById('Question'+i).value;
+        questionContent.push(document.getElementById('Question'+i).value)
         // console.log(document.getElementById('Question'+i).value);
         website+='<div class="Options"'+'>'
+        var newvar=new Array()
         for(j=1;j<=options[i-1];j++){
             website+='<div><input type="radio" id="Q'+i+'O'+j+'"name="Q'+i+'" value='+document.getElementById('Question'+i+j).value+'>'+'<label for="Q'+i+'O'+j+'">'+document.getElementById('Question'+i+j).value+'</label></div>'
             console.log('<div><input type="radio" id="Q'+i+'O'+j+'"name="Q'+i+'" value='+document.getElementById('Question'+i+j).value+'>'+'<label for="Q'+i+'O'+j+'">'+document.getElementById('Question'+i+j).value+'</label></div>')
+            newvar.push(document.getElementById('Question'+i+j).value)
         }
+        responsesoption.push(newvar)
         website+='</div></div>'
    }
+   website+='<a href="dashboard.html"><button id="getdashboard">Goto Dashboard</button></a><br>'+
+   '<button id="submitresponse" onclick="submitresponse()">Submit this response</button></a>';
+   localStorage.setItem('responseoptions',JSON.stringify(responsesoption));     
+   console.log('responses option',responsesoption);
+//    console.log('options',options)
+   localStorage.setItem('options',JSON.stringify(options));
+   localStorage.setItem('totalcount',totalcount)
+   localStorage.setItem('QuestionContent',JSON.stringify(questionContent))
    document.write(website);
-   console.log(website);
+   totalcount=localStorage.getItem('totalcount')
+   options=JSON.parse(localStorage.getItem('options'))
+      console.log(JSON.parse(localStorage.getItem('QuestionContent')))
+   for(i=1;i<=totalcount;i++){
+       var temp=new Array()
+       for(j=1;j<=options[i-1];j++)
+            temp.push(0)
+        responses.push(temp)
+   }
+   console.log(responses)
+}
+function submitresponse(){
+    console.log('before loop',responses)
+    for(i=1;i<=totalcount;i++){
+        for(j=1;j<=options[i-1];j++){
+            if(document.getElementById('Q'+i+'O'+j).checked)
+                responses[i-1][j-1]+=1
+                // console.log("yo")
+        }
+    }
+    console.log(responses)
+    localStorage.setItem('responses',JSON.stringify(responses))
 }
